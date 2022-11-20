@@ -38,10 +38,28 @@ class AudioRecyclerAdapter (val viewModel: AudioViewModel, val arrayList: ArrayL
     override fun onBindViewHolder(holder: AudioRecyclerAdapter.AudioViewHolder, position: Int) {
         val model=arrayList.get(position)
         holder.audioName.text =model.fileName
+        if (position == aposition) {
+//            holder.playButton.setBackgroundResource(0)
+            holder.playButton.setImageDrawable(
+                ContextCompat.getDrawable(
+                    context,
+                    R.drawable.pause_button
+                )
+            )
+        } else {
+//            holder.playButton.setBackgroundResource(0)
+            holder.playButton.setImageDrawable(
+                ContextCompat.getDrawable(
+                    context,
+                    R.drawable.play_button
+                )
+            )
+        }
         holder.playButton.setOnClickListener(View.OnClickListener {
-            Log.i("Adapterposition", "$position%%$aposition")
+            Log.i("Adapterposition444", "$position%%$aposition")
             playAudio(model.filePath, holder.adapterPosition,
                 holder.audioBar, holder.playButton)
+
         })
 
     }
@@ -61,10 +79,11 @@ class AudioRecyclerAdapter (val viewModel: AudioViewModel, val arrayList: ArrayL
                     val firstvisiblePosition = llm.findFirstCompletelyVisibleItemPosition()
                     val lastvisiblePosition=llm.findLastCompletelyVisibleItemPosition()
                     if (aposition>-1 && !(firstvisiblePosition <= aposition && aposition <= lastvisiblePosition)) {
-//                        val v = llm.findViewByPosition(aposition)
                         if(flag) {
-                            if (mediaPlayer.isPlaying)
+                            if (mediaPlayer.isPlaying){
                                 clearMediaPlayer()
+                            }
+
                             flag=false
                         }
 
@@ -133,11 +152,14 @@ class AudioRecyclerAdapter (val viewModel: AudioViewModel, val arrayList: ArrayL
                         R.drawable.pause_button
                     )
                 )
+                notifyItemChanged(aposition)
+//                notifyItemChanged(aposition)
                 thread = Thread(Runnable {
                     var currentPosition: Int = mediaPlayer.getCurrentPosition()
                     val total: Int = mediaPlayer.getDuration()
-                    Log.i("ExceptioAudio", "run")
-                    while (mediaPlayer != null && mediaPlayer.isPlaying() && currentPosition < total) {
+                    Log.i("totalPPP", "$currentPosition##$total")
+
+                    while (mediaPlayer != null && mediaPlayer.isPlaying() ) {
                         currentPosition = try {
                             Log.i("ExceptioAudio", "try1")
                             Thread.sleep(1000)
@@ -149,7 +171,17 @@ class AudioRecyclerAdapter (val viewModel: AudioViewModel, val arrayList: ArrayL
                             Log.i("ExceptioAudio", "$e#2")
                             return@Runnable
                         }
-                        seekBar.progress = currentPosition
+                        if(currentPosition==total){
+                            seekBar.progress = 0
+                            ib.setImageDrawable(
+                                ContextCompat.getDrawable(
+                                    context,
+                                    R.drawable.play_button
+                                )
+                            )
+                            break;
+                        }else
+                            seekBar.progress = currentPosition
                     }
                 })
                 thread!!.start()
@@ -161,6 +193,7 @@ class AudioRecyclerAdapter (val viewModel: AudioViewModel, val arrayList: ArrayL
 //            Toast.makeText(context, "Audio started playing..", Toast.LENGTH_SHORT).show()
             aposition = a_position
             flag=true;
+            //notifyDataSetChanged()
         }
     }
     fun clearMediaPlayer() {
