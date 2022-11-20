@@ -96,10 +96,11 @@ class AudioRecyclerAdapter (val viewModel: AudioViewModel, val arrayList: ArrayL
                 clearMediaPlayer()
                 thread!!.interrupt()
                 seekBar.progress = 0
+                ib.setBackgroundResource(0)
                 ib.setImageDrawable(
                     ContextCompat.getDrawable(
                         context,
-                        android.R.drawable.ic_media_play
+                        R.drawable.play_button
                     )
                 )
             }
@@ -125,10 +126,11 @@ class AudioRecyclerAdapter (val viewModel: AudioViewModel, val arrayList: ArrayL
                 mediaPlayer.prepare()
                 mediaPlayer.start()
                 seekBar.max = mediaPlayer.getDuration()
+                ib.setBackgroundResource(0)
                 ib.setImageDrawable(
                     ContextCompat.getDrawable(
                         context,
-                        android.R.drawable.ic_media_pause
+                        R.drawable.pause_button
                     )
                 )
                 thread = Thread(Runnable {
