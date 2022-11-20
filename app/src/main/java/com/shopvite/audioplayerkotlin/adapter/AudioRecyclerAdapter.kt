@@ -56,7 +56,7 @@ class AudioRecyclerAdapter (val viewModel: AudioViewModel, val arrayList: ArrayL
             )
         }
         holder.playButton.setOnClickListener(View.OnClickListener {
-            Log.i("Adapterposition444", "$position%%$aposition")
+            Log.i("Adapterposition", "$position%%$aposition")
             playAudio(model.filePath, holder.adapterPosition,
                 holder.audioBar, holder.playButton)
 
@@ -133,7 +133,7 @@ class AudioRecyclerAdapter (val viewModel: AudioViewModel, val arrayList: ArrayL
         if (aposition != a_position) {
             // below line is use to set our
             // url to our media player.
-            Log.d("ExceptioAudio", audioUrl)
+            Log.d("Adapterposition", audioUrl)
             try {
                 mediaPlayer = MediaPlayer()
                 // below line is use to set the audio
@@ -157,7 +157,7 @@ class AudioRecyclerAdapter (val viewModel: AudioViewModel, val arrayList: ArrayL
                 thread = Thread(Runnable {
                     var currentPosition: Int = mediaPlayer.getCurrentPosition()
                     val total: Int = mediaPlayer.getDuration()
-                    Log.i("totalPPP", "$currentPosition##$total")
+                    Log.i("Adapterposition", "$currentPosition##$total")
 
                     while (mediaPlayer != null && mediaPlayer.isPlaying() ) {
                         currentPosition = try {
